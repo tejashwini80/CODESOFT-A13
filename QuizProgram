@@ -1,0 +1,90 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class QuizProgram extends JFrame {
+    private JLabel questionLabel;
+    private JTextField answerField;
+    private JButton submitButton;
+    private Timer timer;
+    private int timeRemaining = 10; // Time in seconds
+
+    public QuizProgram() {
+        // Set up the frame
+        setTitle("Quiz Program");
+        setSize(400, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+
+        // Create components
+        questionLabel = new JLabel("What is 2 + 2?");
+        questionLabel.setBounds(20, 20, 200, 20);
+
+        answerField = new JTextField();
+        answerField.setBounds(20, 50, 100, 20);
+
+        submitButton = new JButton("Submit");
+        submitButton.setBounds(130, 50, 80, 20);
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAnswer();
+            }
+        });
+
+        // Add components to the frame
+        add(questionLabel);
+        add(answerField);
+        add(submitButton);
+
+        // Create and start the timer
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTime();
+            }
+        });
+        timer.start();
+    }
+
+    private void checkAnswer() {
+        String userAnswer = answerField.getText();
+        if ("4".equals(userAnswer)) {
+            JOptionPane.showMessageDialog(this, "Correct!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Incorrect!");
+        }
+
+        // Reset the timer and update the question
+        resetTimer();
+        updateQuestion();
+    }
+
+    private void updateQuestion() {
+        // You can modify this method to load questions dynamically
+        // For simplicity, we are using a static question in this example
+        questionLabel.setText("What is 3 x 3?");
+    }
+
+    private void updateTime() {
+        timeRemaining--;
+        if (timeRemaining <= 0) {
+            // Time's up, check the answer and update the question
+            checkAnswer();
+        }
+    }
+
+    private void resetTimer() {
+        // Reset the timer to the initial time
+        timeRemaining = 10;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new QuizProgram().setVisible(true);
+            }
+        });
+    }
+}
